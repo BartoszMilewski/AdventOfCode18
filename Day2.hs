@@ -23,7 +23,7 @@ main = do
 checkSum :: [String] -> Int
 checkSum cs =
   let xs = fmap twoThree cs
-      (twos, threes) = foldl 
+      (twos, threes) = foldl' 
         (\(x, x') (b, b') -> (x + fromBool b, x' + fromBool b'))
         (0, 0) xs
   in twos * threes
@@ -36,7 +36,7 @@ add :: Ord a => Counts a -> a -> Counts a
 add cs c = M.insertWith (+) c 1 cs
 
 charCounts :: String -> Counts Char
-charCounts s = foldl add M.empty s
+charCounts s = foldl' add M.empty s
 
 twoThree :: String -> (Bool, Bool)
 twoThree s = 
@@ -169,7 +169,7 @@ accum (TrieF bs) = -- b :: (Char, ([String], [String]))
         (ss1, ss2) = both concat pss
         -- find duplicates
         ss = concat $ fmap (fst . snd) bs
-        mset = foldl add M.empty ss
+        mset = foldl' add M.empty ss
         dups = M.keys $ M.filter (> 1) mset
      in (ss1, dups ++ ss2)
   where
